@@ -6,10 +6,7 @@ import org.hibernate.service.spi.ServiceException;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
-import ua.semkov.marketplace.exceptions.ProductAlreadyExistException;
-import ua.semkov.marketplace.exceptions.ProductNotFoundException;
-import ua.semkov.marketplace.exceptions.UserAlreadyExistException;
-import ua.semkov.marketplace.exceptions.UserNotFoundException;
+import ua.semkov.marketplace.exceptions.*;
 import ua.semkov.marketplace.model.Product;
 import ua.semkov.marketplace.model.User;
 import ua.semkov.marketplace.repository.ProductRepository;
@@ -56,15 +53,18 @@ public class SystemService {
     public void addUserProduct(User user, Product product) {
         log.debug("Trying to add product:{} to user:{}", user, product);
 
-        if (user.getAmountOfMoney().compareTo(product.getPrice()) > 0) {
-            user.setProducts((List<Product>) product);
+
+        if (user.getAmountOfMoney().compareTo(product.getPrice()) >= 0) {
             try {
-                return userRepository.save(product);
+                user.getProducts().add(product);
+                product.getUsers().add(user);
+                userRepository.save(user);
+                productRepository.save(product);
             } catch (DataAccessException e) {
-                log.error("Failed to add product: {}", product, e);
-                throw new ServiceException("Failed to add product", e);
+                log.error("Failed to add product to user: {}", user, e);
+                throw new ServiceException("Failed to add product to user", e);
             }
-        }
+        }else throw new NotEnoughAmountOfMoney("Amount of money is lower than product");
     }
 
 
