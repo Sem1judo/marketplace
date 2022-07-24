@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.List;
 
 
 @Table
@@ -24,5 +25,11 @@ public class User {
     private String lastName;
     @Column
     private BigDecimal amountOfMoney;
+    @ManyToMany
+    @JoinTable(
+            name = "user_products",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id"))
+    List<Product> products;
 
 }

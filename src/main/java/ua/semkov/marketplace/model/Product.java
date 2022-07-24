@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Table
 @Entity
@@ -22,5 +23,6 @@ public class Product {
     private String name;
     @Column
     private BigDecimal price;
-
+    @ManyToMany(mappedBy = "products")
+    List<User> users;
 }
