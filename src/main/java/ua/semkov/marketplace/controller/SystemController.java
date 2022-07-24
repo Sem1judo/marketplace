@@ -1,7 +1,10 @@
 package ua.semkov.marketplace.controller;
 
 
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 import ua.semkov.marketplace.model.Product;
 import ua.semkov.marketplace.model.User;
@@ -11,9 +14,10 @@ import java.awt.print.Book;
 import java.util.List;
 
 @RestController
+@Slf4j
+@AllArgsConstructor
 public class SystemController {
 
-    @Autowired
     SystemService systemService;
 
     @PostMapping("/addUser")
