@@ -23,12 +23,12 @@ public class SystemService {
     private final ProductRepository productRepository;
 
 
-    public List<User> findAllByProduct(Product product) {
-        return userRepository.findAllByProduct(product);
+    public List<User> findAllByProduct(Long id) {
+        return userRepository.findAllByProductId(id);
     }
 
-    public List<Product> findAllByUser(User user) {
-        return productRepository.findAllByUser(user);
+    public List<Product> findAllByUser(Long id) {
+        return productRepository.findAllByUserId(id);
     }
 
 
@@ -45,7 +45,7 @@ public class SystemService {
         }
     }
 
-    public List<Product> getListProductsByUser(User user) {
+    public List<Product> getListProducts() {
         log.debug("Trying to get list of products");
         try {
             return productRepository.findAll();
@@ -98,36 +98,37 @@ public class SystemService {
         }
     }
 
-    public void deleteUser(User user) {
-        log.debug("Trying to delete user = {}", user);
+    public void deleteUserById(Long id) {
+        log.debug("Trying to delete user = {}", id);
 
-        if (user == null) {
+        if (id == null) {
             throw new ServiceException("not found user");
         }
         try {
-            userRepository.delete(user);
+            userRepository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
-            log.warn("Not existing user = {}", user);
+            log.warn("Not existing user = {}", id);
             throw new UserNotFoundException("not exist user");
         } catch (DataAccessException e) {
-            log.error("failed to delete user = {}", user, e);
+            log.error("failed to delete user = {}", id, e);
             throw new ServiceException("Failed to delete user", e);
         }
     }
-    public void deleteProduct(Product product) {
-        log.debug("Trying to delete product = {}", product);
+    public void deleteProductById(Long id) {
+        log.debug("Trying to delete product = {}", id);
 
-        if (product == null) {
+        if (id == null) {
             throw new ServiceException("not found product");
         }
         try {
-            productRepository.delete(product);
+            productRepository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
-            log.warn("Not existing product = {}", product);
+            log.warn("Not existing product = {}", id);
             throw new ProductNotFoundException("not exist product");
         } catch (DataAccessException e) {
-            log.error("failed to delete product = {}", product, e);
+            log.error("failed to delete product = {}", id, e);
             throw new ServiceException("Failed to delete product", e);
         }
     }
 }
+
