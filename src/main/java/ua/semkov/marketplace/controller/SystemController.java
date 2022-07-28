@@ -30,6 +30,15 @@ public class SystemController {
         systemService.addProduct(product);
     }
 
+    @GetMapping("/findByIdUser/{id}")
+    public User getUserById(@PathVariable long id) {
+        return systemService.findByIdUser(id);
+    }
+    @GetMapping("/findByIdProduct/{id}")
+    public Product getProductById(@PathVariable long id) {
+        return systemService.findByIdProduct(id);
+    }
+
     @GetMapping("/getListUsers")
     public List<User> getAllUsers() {
         return systemService.getListUsers();

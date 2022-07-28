@@ -57,6 +57,46 @@ public class SystemService {
             throw new ServiceException("Failed to get list of products", e);
         }
     }
+    public User findByIdUser(long id) {
+        log.debug("Trying to get user by id={}", id);
+
+        if (id == 0) {
+            log.warn("Missing id user");
+            throw new ServiceException("Missing id user");
+        }
+        User user;
+        try {
+            user = userRepository.findById(id)
+                    .orElseThrow(() -> new UserNotFoundException("Invalid user ID"));
+        } catch (EmptyResultDataAccessException e) {
+            log.warn("Not existing user by id={}", id);
+            throw new UserNotFoundException("Not existing user by id =" + id);
+        } catch (DataAccessException e) {
+            log.error("Failed to retrieve user by id={}", id, e);
+            throw new ServiceException("Failed to retrieve user by id", e);
+        }
+        return user;
+    }
+    public Product findByIdProduct(long id) {
+        log.debug("Trying to get product by id={}", id);
+
+        if (id == 0) {
+            log.warn("Missing id product");
+            throw new ServiceException("Missing id product");
+        }
+        Product product;
+        try {
+            product = productRepository.findById(id)
+                    .orElseThrow(() -> new UserNotFoundException("Invalid product ID"));
+        } catch (EmptyResultDataAccessException e) {
+            log.warn("Not existing product by id={}", id);
+            throw new UserNotFoundException("Not existing product by id =" + id);
+        } catch (DataAccessException e) {
+            log.error("Failed to retrieve product by id={}", id, e);
+            throw new ServiceException("Failed to retrieve product by id", e);
+        }
+        return product;
+    }
 
     public void addUserProduct(User user, Product product) {
         log.debug("Trying to add product:{} to user:{}", user, product);

@@ -11,4 +11,6 @@ import java.util.List;
 public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query(value = "select * from user_products WHERE user_id = :id", nativeQuery = true)
     List<Product> findAllByUserId(@Param("id") long id);
+
+
 }
