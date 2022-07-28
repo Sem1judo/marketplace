@@ -11,6 +11,7 @@ import ua.semkov.marketplace.model.User;
 import ua.semkov.marketplace.service.SystemService;
 
 import java.awt.print.Book;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -21,7 +22,7 @@ public class SystemController {
     SystemService systemService;
 
     @PostMapping("/addUser")
-    public void addUser(@RequestBody User user)  {
+    public void addUser(@RequestBody User user) {
         systemService.addUser(user);
     }
 
@@ -30,10 +31,17 @@ public class SystemController {
         systemService.addProduct(product);
     }
 
+    @PostMapping("/buyProduct/{id}")
+    public void buyProduct(@RequestBody User user,@PathVariable long id) {
+        Product product = systemService.findByIdProduct(id);
+        systemService.addUserProduct(user, product);
+    }
+
     @GetMapping("/findByIdUser/{id}")
     public User getUserById(@PathVariable long id) {
         return systemService.findByIdUser(id);
     }
+
     @GetMapping("/findByIdProduct/{id}")
     public Product getProductById(@PathVariable long id) {
         return systemService.findByIdProduct(id);
@@ -49,14 +57,22 @@ public class SystemController {
         return systemService.getListProducts();
     }
 
-    @GetMapping("/findAllUsersByProduct/{id}")
-    public List<User> getUsersByProduct(@PathVariable("id") Long id) {
-        return systemService.findAllByProduct(id);
+    @GetMapping("/findAllByProductId/{product_id}")
+    public List<User> findAllByProductId(@PathVariable("product_id") Long product_id) {
+        List<User> users = new ArrayList<>();
+        for (int i = 0; i < systemService.findAllByProductId(product_id).size(); i++) {
+            users.add(systemService.findByIdUser(systemService.getListUsers().get(i).getId()));
+        }
+        return users;
     }
 
-    @GetMapping("/findAllProductByUser/{id}")
-    public List<Product> getProductsByUser(@PathVariable("id") Long id) {
-        return systemService.findAllByUser(id);
+    @GetMapping("/findAllByUserId/{user_id}")
+    public List<Product> findAllByUserId(@PathVariable("user_id") Long user_id) {
+        List<Product> products = new ArrayList<>();
+        for (int i = 0; i < systemService.findAllByUserId(user_id).size(); i++) {
+            products.add(systemService.findByIdProduct(systemService.getListProducts().get(i).getId()));
+        }
+        return products;
     }
 
     @DeleteMapping("/deleteUser/{id}")

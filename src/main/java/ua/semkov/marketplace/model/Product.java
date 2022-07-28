@@ -1,9 +1,12 @@
 package ua.semkov.marketplace.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Table(name = "products")
@@ -13,6 +16,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class Product {
 
     @Id
@@ -24,5 +30,6 @@ public class Product {
     @Column
     private BigDecimal price;
     @ManyToMany(mappedBy = "products")
-    List<User> users;
+    @ToString.Exclude
+    List<User> users = new ArrayList<>();
 }

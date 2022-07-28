@@ -23,12 +23,14 @@ public class SystemService {
     private final ProductRepository productRepository;
 
 
-    public List<User> findAllByProduct(long id) {
-        return userRepository.findAllByProducts(id);
+    public List<Long> findAllByProductId(Long product_id) {
+        log.debug("Trying to get list of users by product id{}", product_id);
+        return userRepository.findAllByProductId(product_id);
     }
 
-    public List<Product> findAllByUser(long id) {
-        return productRepository.findAllByUserId(id);
+    public List<Long> findAllByUserId(Long user_id) {
+        log.debug("Trying to get list of product by user id{}", user_id);
+        return productRepository.findAllByUserId(user_id);
     }
 
 
@@ -57,6 +59,7 @@ public class SystemService {
             throw new ServiceException("Failed to get list of products", e);
         }
     }
+
     public User findByIdUser(long id) {
         log.debug("Trying to get user by id={}", id);
 
@@ -77,6 +80,7 @@ public class SystemService {
         }
         return user;
     }
+
     public Product findByIdProduct(long id) {
         log.debug("Trying to get product by id={}", id);
 
@@ -101,10 +105,13 @@ public class SystemService {
     public void addUserProduct(User user, Product product) {
         log.debug("Trying to add product:{} to user:{}", user, product);
 
+        user = findByIdUser(user.getId());
         if (user.getAmountOfMoney().compareTo(product.getPrice()) >= 0) {
             try {
                 user.getProducts().add(product);
                 product.getUsers().add(user);
+                user.setAmountOfMoney(user.getAmountOfMoney().subtract(product.getPrice()));
+
                 userRepository.save(user);
                 productRepository.save(product);
             } catch (DataAccessException e) {
@@ -153,6 +160,7 @@ public class SystemService {
             throw new ServiceException("Failed to delete user", e);
         }
     }
+
     public void deleteProductById(Long id) {
         log.debug("Trying to delete product = {}", id);
 
