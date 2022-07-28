@@ -23,11 +23,11 @@ public class SystemService {
     private final ProductRepository productRepository;
 
 
-    public List<User> findAllByProduct(Long id) {
-        return userRepository.findAllByProductId(id);
+    public List<User> findAllByProduct(long id) {
+        return userRepository.findAllByProducts(id);
     }
 
-    public List<Product> findAllByUser(Long id) {
+    public List<Product> findAllByUser(long id) {
         return productRepository.findAllByUserId(id);
     }
 
@@ -60,7 +60,6 @@ public class SystemService {
 
     public void addUserProduct(User user, Product product) {
         log.debug("Trying to add product:{} to user:{}", user, product);
-
 
         if (user.getAmountOfMoney().compareTo(product.getPrice()) >= 0) {
             try {
