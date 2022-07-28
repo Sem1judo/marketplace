@@ -21,7 +21,7 @@ public class SystemController {
     SystemService systemService;
 
     @PostMapping("/addUser")
-    public void addUser(@RequestBody User user) {
+    public void addUser(@RequestBody User user)  {
         systemService.addUser(user);
     }
 

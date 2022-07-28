@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
 
-@Table
+@Table(name = "products")
 @Entity
 @Getter
 @Setter

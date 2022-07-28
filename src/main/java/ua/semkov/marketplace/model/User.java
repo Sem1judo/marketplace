@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 
-@Table
+@Table(name = "users")
 @Entity
 @Getter
 @Setter
@@ -30,6 +30,7 @@ public class User {
             name = "user_products",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "product_id"))
+    @ToString.Exclude
     List<Product> products;
 
 }
